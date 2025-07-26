@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Todo App</title>
-</head>
+<head><title>Todos for {{ owner }}</title></head>
 <body>
-    <h1>Simple Todo App</h1>
+  <h1>งานของ {{ owner }}</h1>
 
-    <form action="/create-todo" method="post">
-        <input type="text" name="item" placeholder="Enter a new todo" required>
-        <button type="submit">Add</button>
-    </form>
+  <ul>
+    {% for todo in todos %}
+      <li>{{ todo.task }} (ID: {{ todo.id }})</li>
+    {% endfor %}
+  </ul>
 
-    <h2>Todo List:</h2>
-    <ul>
-        {% for todo in todos %}
-            <li>{{ todo }}</li>
-        {% else %}
-            <li>No todos yet!</li>
-        {% endfor %}
-    </ul>
+  <form action="/todos/{{ owner }}" method="post">
+    <input type="text" name="item" placeholder="เพิ่มงานใหม่" required>
+    <button type="submit">เพิ่ม</button>
+  </form>
+
+  <br>
+  <form action="/todos/{{ owner }}" method="get">
+    <input type="text" name="owner" placeholder="สลับชื่อ owner เช่น alice, bob">
+    <button type="submit">เปลี่ยน owner</button>
+  </form>
 </body>
 </html>
