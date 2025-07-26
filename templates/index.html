@@ -1,24 +1,44 @@
 <!DOCTYPE html>
 <html>
-<head><title>Todos for {{ owner }}</title></head>
+<head>
+  <title>Todo App</title>
+</head>
 <body>
-  <h1>งานของ {{ owner }}</h1>
-
-  <ul>
-    {% for todo in todos %}
-      <li>{{ todo.task }} (ID: {{ todo.id }})</li>
-    {% endfor %}
-  </ul>
-
-  <form action="/todos/{{ owner }}" method="post">
-    <input type="text" name="item" placeholder="เพิ่มงานใหม่" required>
-    <button type="submit">เพิ่ม</button>
+  
+  <h1>Todo List {% if owner %}ของ {{ owner }}{% endif %}</h1>
+  <form action="/" method="get">
+    <button type="submit">แสดง todo ทั้งหมด</button>
+  </form>
+  <form action="/change-owner" method="post">
+    <input type="text" name="owner" placeholder="ใส่ชื่อ owner เช่น alice" value="{{ owner }}" required>
+    <button type="submit">ดูงานของ owner</button>
   </form>
 
-  <br>
-  <form action="/todos/{{ owner }}" method="get">
-    <input type="text" name="owner" placeholder="สลับชื่อ owner เช่น alice, bob">
-    <button type="submit">เปลี่ยน owner</button>
+  <hr>
+
+  {% if todos %}
+    <ul>
+        {% for todo in todos %}
+        <li>
+            {{ todo.task }} (ID: {{ todo.id }}, Owner: {{ todo.owner }})
+            <form action="/delete" method="post" style="display:inline;">
+            <input type="hidden" name="task" value="{{ todo.task }}">
+            <input type="hidden" name="owner" value="{{ todo.owner }}">
+            <button type="submit">ลบ</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>ยังไม่มีงาน</p>
+    {% endif %}
+
+  <hr>
+
+  <form action="/add" method="post">
+    <input type="text" name="item" placeholder="เพิ่มงานใหม่" required>
+    <input type="hidden" name="owner" value="{{ owner }}">
+    <button type="submit">เพิ่มงาน</button>
   </form>
 </body>
 </html>
